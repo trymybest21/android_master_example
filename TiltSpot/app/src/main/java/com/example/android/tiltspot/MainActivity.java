@@ -26,12 +26,22 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Display;
 import android.view.Surface;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Button;
+import android.widget.Toast;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.FileReader;
 
 public class MainActivity extends AppCompatActivity
         implements SensorEventListener {
+
+    Button save;
 
     // System sensor manager instance.
     private SensorManager mSensorManager;
@@ -60,6 +70,10 @@ public class MainActivity extends AppCompatActivity
     // System display. Need this for determining rotation.
     private Display mDisplay;
 
+    private TextView labelAzimuth;
+    private TextView labelPitch;
+    private TextView labelRoll;
+
     // Very small values for the accelerometer (on all three axes) should
     // be interpreted as 0. This value is the amount of acceptable
     // non-zero drift.
@@ -70,13 +84,17 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        labelAzimuth = (TextView) findViewById(R.id.label_azimuth);
         mTextSensorAzimuth = (TextView) findViewById(R.id.value_azimuth);
+        labelPitch = (TextView) findViewById(R.id.label_pitch);
         mTextSensorPitch = (TextView) findViewById(R.id.value_pitch);
+        labelRoll = (TextView) findViewById(R.id.label_roll);
         mTextSensorRoll = (TextView) findViewById(R.id.value_roll);
         mSpotTop = (ImageView) findViewById(R.id.spot_top);
         mSpotBottom = (ImageView) findViewById(R.id.spot_bottom);
         mSpotLeft = (ImageView) findViewById(R.id.spot_left);
         mSpotRight = (ImageView) findViewById(R.id.spot_right);
+        save = (Button) findViewById(R.id.save);
 
         // Get accelerometer and magnetometer sensors from the sensor manager.
         // The getDefaultSensor() method returns null if the sensor
@@ -91,6 +109,55 @@ public class MainActivity extends AppCompatActivity
         // Get the display from the window manager (for rotation).
         WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
         mDisplay = wm.getDefaultDisplay();
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!mTextSensorAzimuth.getText().toString().isEmpty()) {
+                    File file = new File(MainActivity.this.getFilesDir(), "text");
+                    if (!file.exists()) {
+                        file.mkdir();
+                    }
+                    try {
+                        File gpsexchangefile = new File(file, "dataTiltSpot");
+                        FileWriter writer = new FileWriter(gpsexchangefile);
+                        writer.append(labelAzimuth.getText().toString());
+                        writer.append(mTextSensorAzimuth.getText().toString());
+                        writer.append(labelPitch.getText().toString());
+                        writer.append(mTextSensorPitch.getText().toString());
+                        writer.append(labelRoll.getText().toString());
+                        writer.append(mTextSensorRoll.getText().toString());
+                        writer.flush();
+                        writer.close();
+
+//                        mTextSensorAzimuth.setText(readFile());
+//
+//                        mTextSensorPitch.setText(readFile());
+//
+//                        mTextSensorRoll.setText(readFile());
+                        Toast.makeText(getBaseContext(), "File telah tersimpan!",
+                                Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                    }
+                }
+            }
+        });
+    }
+
+    private String readFile() {
+        File fileEvents = new File(MainActivity.this.getFilesDir() + "/text/dataTiltSpot");
+        StringBuilder text = new StringBuilder();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(fileEvents));
+            String line;
+            while ((line = br.readLine()) != null) {
+                text.append(line);
+                text.append(' ');
+            }
+            br.close();
+        } catch (IOException e) {
+        }
+        String result = text.toString();
+        return result;
     }
 
     /**

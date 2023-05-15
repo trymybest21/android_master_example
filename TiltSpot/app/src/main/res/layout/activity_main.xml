@@ -90,6 +90,7 @@ limitations under the License. -->
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/value_pitch"/>
+
     </android.support.constraint.ConstraintLayout>
 
     <!-- Four spot drawables for the cardinal directions on the device.
@@ -145,5 +146,29 @@ limitations under the License. -->
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/spot"
         tools:ignore="ContentDescription" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/label_group"
+        android:layout_width="170dp"
+        android:layout_height="170dp"
+        android:layout_marginLeft="84dp"
+        android:layout_marginStart="84dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="DuplicateIds">
+        <Button
+            android:id="@+id/save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="simpan"
+            android:textColor="@color/colorPrimary"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="166dp"
+            tools:layout_editor_absoluteY="545dp" />
+    </android.support.constraint.ConstraintLayout>
+
 
 </android.support.constraint.ConstraintLayout>
