@@ -121,11 +121,11 @@ public class MainActivity extends AppCompatActivity
                         File gpsexchangefile = new File(file, "dataTiltSpot");
                         FileWriter writer = new FileWriter(gpsexchangefile);
                         writer.append(labelAzimuth.getText().toString());
-                        writer.append(mTextSensorAzimuth.getText().toString());
+                        writer.append(mTextSensorAzimuth.getText().toString() + "\n");
                         writer.append(labelPitch.getText().toString());
-                        writer.append(mTextSensorPitch.getText().toString());
+                        writer.append(mTextSensorPitch.getText().toString() + "\n");
                         writer.append(labelRoll.getText().toString());
-                        writer.append(mTextSensorRoll.getText().toString());
+                        writer.append(mTextSensorRoll.getText().toString()+ "\n");
                         writer.flush();
                         writer.close();
 
